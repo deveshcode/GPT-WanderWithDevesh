@@ -223,16 +223,28 @@ def format_answer(question, answer):
     # Prepare the prompt for GPT-3 to generate a user-friendly response
     prompt = f"Translate the following database answer into a detailed, user-friendly response based on the original question:\nQuestion: {question}\nAnswer from database: {answer}\nFormatted Answer:"
 
-    completion = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are an insightful assistant, skilled in transforming raw data responses into clear, understandable language."},
-            {"role": "user", "content": prompt}
-        ]
-    )
+    print("\n\n\n")
+    print(answer)
+    if answer:
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are an insightful assistant, skilled in transforming raw data responses into clear, understandable language."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        formatted_response = completion.choices[0].message.content.strip()
+    else:
+        formatted_response = "It appears that the database did not provide a specific answer to your question. Let me Look that up online.\n"
+        completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a travel agent."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        formatted_response += completion.choices[0].message.content.strip()
 
-    # Extracting the formatted answer from the response
-    formatted_response = completion.choices[0].message.content.strip()
     return formatted_response
 
 
