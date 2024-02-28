@@ -214,7 +214,7 @@ import os
 from openai import OpenAI
 
 def format_answer(question, answer):
-    openai_api_key = "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"
+    openai_api_key = os.getenv("OPENAI_API_KEY")
     if not openai_api_key:
         raise ValueError("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
 
