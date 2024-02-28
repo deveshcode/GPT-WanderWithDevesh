@@ -1,0 +1,113 @@
+/* Global Page Styles */
+.App {
+  background-image: url('assets/bg3.webp');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+}
+/* Enhanced Typing Animation for Title */
+.title {
+  width: 28ch;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 4px solid #d75c5c; /* Cursor line with theme color */
+  font-family: 'Courier New', Courier, monospace; /* Classic typewriter font */
+  animation: typing 4s steps(28), blink-caret 1s step-end infinite;
+  color: #d75c5c; /* Eye-catching title color */
+  padding: 20px;
+  margin: 0; /* Reset margin for precise positioning */
+  font-size: 3em; /* Larger, prominent title */
+  background: rgba(255, 186, 186, 0.5); /* Subtle background for better readability */
+  border-radius: 10px; /* Soft rounded corners */
+  box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.7); /* Soft shadow for depth */
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 28ch; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #d75c5c; }
+}
+
+/* Title Styles */
+.title2 {
+  color: #a85252;
+  padding: 10px;
+  display: inline-block;
+  position: absolute;
+  top: 120px;
+  left: 20px;
+  background: transparent;
+  font-size: 2.5em;
+  z-index: 10;
+}
+
+/* Form and Interaction Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 90%; /* Responsive width */
+  max-width: 500px; /* Maximum width */
+}
+
+
+.query-input, .response {
+  padding: 20px;
+  font-size: 1.5em;
+  margin: 20px 0; /* Space between form elements */
+  border: none;
+  border-radius: 10px; /* Soft rounded corners */
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent background */
+  color: #696767;
+  outline: none;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3); /* Consistent, subtle shadow */
+}
+
+.query-input {
+  width: 90%;
+  padding: 20px; /* Increased padding for a bigger input box */
+  font-size: 1.5em; /* Larger font size */
+  margin-bottom: 20px; /* Space between the input and the button */
+  border: none; /* No border */
+  border-radius: 5px; /* Rounded corners */
+  color: #464646;
+  background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white background */
+  outline: none; /* Removes the outline on focus */
+}
+
+
+/* Submit Button Styles */
+.submit-btn {
+  padding: 20px 50px; /* Match the input box padding for uniformity */
+  font-size: 1.5em; /* Increase font size to match the input box */
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  background-color: rgba(255, 9, 9, 0.5);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: rgba(185, 193, 236, 0.5); /* Slightly darker on hover with transparency */
+}
+
+.response {
+  height: 250px;
+  width: 90%; /* Full width to match input box */
+  padding: 25px 20px; /* Increased padding for a larger display area */
+  font-size: 1.5em; /* Larger font size for bigger text */
+  margin-top: 20px; /* Space above the response box */
+  border: 2px solid #FFFFFF; /* Maintain or adjust border as desired */
+  border-radius: 8px; /* Rounded corners to match input box */
+  color: #302f2f; /* Keep text color white for visibility */
+  background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white background */
+  outline: none;
+}

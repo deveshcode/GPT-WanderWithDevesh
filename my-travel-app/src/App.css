@@ -1,0 +1,127 @@
+/* Global Page Styles */
+.App {
+  background-image: url('assets/bg3.webp');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  position: relative;
+}
+
+.title {
+  width: 100%;
+  max-width: 85%;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: 4px solid #d75c5c; /* Cursor line with theme color */
+  animation: typing 2s steps(24), blink-caret .75s step-end infinite;
+  color: rgba(255, 14, 14, 0.747);
+  padding: 20px;
+  font-size: 3em; /* Larger, prominent title */
+  background-color: rgba(255, 255, 255, 0.05); /* Semi-transparent white background */
+  border-radius: 10px; /* Soft rounded corners */
+}
+
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 24ch; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #d75c5c; }
+}
+
+
+/* Form and Interaction Styles */
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 90%; /* Responsive width */
+  max-width: 500px; /* Maximum width */
+}
+
+
+/* Submit Button Styles */
+.submit-btn {
+  padding: 20px 50px; /* Match the input box padding for uniformity */
+  font-size: 1.5em; /* Increase font size to match the input box */
+  border: none;
+  border-radius: 8px;
+  color: #ffffff;
+  background-color: rgba(255, 9, 9, 0.5);
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s ease;
+  margin-left: 1%;
+}
+
+.submit-btn:hover {
+  background-color: rgba(185, 193, 236, 0.5); /* Slightly darker on hover with transparency */
+}
+
+.response {
+  height: 250px;
+  width: 90%; /* Full width to match input box */
+  padding: 25px 20px; /* Increased padding for a larger display area */
+  font-size: 1.5em; /* Larger font size for bigger text */
+  margin-top: 20px; /* Space above the response box */
+  border: 2px solid #FFFFFF; /* Maintain or adjust border as desired */
+  border-radius: 8px; /* Rounded corners to match input box */
+  color: #302f2f; /* Keep text color white for visibility */
+  background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white background */
+  outline: none;
+}
+
+.explainer {
+    display: flex;
+    margin-top: 2%;
+}
+
+.step {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #eccccc;
+    color: #681212;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin: 10px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+}
+
+.query-output {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #eccccc;
+  color: #681212;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  margin: 10px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.7); /* Semi-transparent white background */
+  font-size: 1.5em; /* Larger font size */
+}
+
+
+.query-input {
+  width: 90%;
+  padding: 20px;
+  border-radius: 10px;
+  font-size: 1.5em; /* Larger font size */
+  margin-bottom: 20px; /* Space between the input and the button */
+  border: none; /* No border */
+  color: #5c0404;
+  background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+  margin-left: 1%;
+}
+
+
+code, pre {
+    background-color: #e8e8e8;
+    border-radius: 5px;
+    padding: 5px;
+    display: block;
+    overflow-wrap: break-word;
+}
