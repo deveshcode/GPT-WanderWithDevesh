@@ -1,4 +1,4 @@
-# Project Title: WanderWithDevesh
+# GPT:WanderWithDevesh
 
 <img width="1280" alt="Screenshot 2024-02-28 at 12 36 02 PM" src="https://github.com/deveshcode/GPT-WanderWithDevesh/assets/37287532/2d7da0b1-0eb6-4164-b3cd-221cca06d372">
 
