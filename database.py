@@ -1,5 +1,27 @@
+import os
+from openai import OpenAI
+import math 
+import openai
+import sqlite3
+import numpy as np
+from nltk.tokenize import word_tokenize
+from gensim.models import KeyedVectors
+import nltk
 import sqlite3
 import os
+import openai
+import sqlite3
+from nltk.tokenize import word_tokenize
+from nltk.translate.bleu_score import sentence_bleu
+import pickle
+from nltk.corpus import stopwords
+from nltk.tokenize import word_tokenize
+import string
+
+
+# nltk.download('stopwords')
+# nltk.download('punkt')
+
 
 def create_database():
     # Connect to SQLite database (or create it if it doesn't exist)
@@ -210,10 +232,25 @@ def nl_to_sql(question, openai_api_key):
     sql_query = completion.choices[0].message.content.strip()
     return sql_query
 
-import os
-from openai import OpenAI
 
-def format_answer(question, answer):
+def gk_answer(question):
+    openai_api_key = os.getenv("OPENAI_API_KEY")
+    if not openai_api_key:
+        raise ValueError("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
+
+    client = OpenAI(api_key=openai_api_key)
+
+    completion = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {"role": "system", "content": "You are a travel agent."},
+            {"role": "user", "content": question}
+        ]
+    )
+    formatted_response = completion.choices[0].message.content.strip()
+    return formatted_response
+
+def format_answer(question, answer, ):
     openai_api_key = os.getenv("OPENAI_API_KEY")
     if not openai_api_key:
         raise ValueError("OpenAI API key not found. Please set the OPENAI_API_KEY environment variable.")
@@ -247,17 +284,127 @@ def format_answer(question, answer):
 
     return formatted_response
 
+# Configure your OpenAI API key
+openai_api_key = os.getenv("OPENAI_API_KEY")
 
-# Example usage
+# from gensim.scripts.glove2word2vec import glove2word2vec
 
-# openai_api_key = os.getenv("OPENAI_API_KEY")
-# question = "What's the package cost in Paris?"
-# sql_query = nl_to_sql(question, openai_api_key)
-# print(sql_query)
+# glove_input_file = 'glove.6B.50d.txt'
+# word2vec_output_file = 'glove.6B.50d.txt.w2v'
+# glove2word2vec(glove_input_file, word2vec_output_file)
 
-# ss = execute_query(sql_query=sql_query)
-# print(ss)
+model_path = 'glove.6B.50d.txt.w2v'  # Make sure to convert GloVe format to Word2Vec format
+word_vectors = KeyedVectors.load_word2vec_format(model_path, binary=False)  # Note: binary is False for text format
 
-# formatted_response = format_answer(question=question, answer=ss)
-# print(formatted_response)
+# Prepare a set of stopwords and punctuation
+stop_words = set(stopwords.words('english'))
+punctuation = set(string.punctuation)
+
+def vectorize_text(text):
+    """Convert text to a vector by averaging its word vectors, ignoring stop words and punctuation."""
+    # Tokenize the text and filter out stop words and punctuation
+    tokens = [word for word in word_tokenize(text.lower()) if word not in stop_words and word not in punctuation]
+    # Convert filtered tokens to vectors, if they are in the word_vectors vocabulary
+    vectors = [word_vectors[word] for word in tokens if word in word_vectors]
+    if vectors:
+        return np.mean(vectors, axis=0)
+    else:
+        return np.zeros(50)  # Assuming GloVe vectors are 50-dimensional
+ 
+def detect_intent(question, db_path='travel_agency.db'):
+    print("intent")
+    # Initialize weights
+    gpt_weight = 0.8
+    similarity_weight = 0.2
+
+    prompt = f"Determine if the following question is a database-related question or a general knowledge question. Strictly give Database or General knowledge:\n\n'{question}'"
+    client = OpenAI(api_key=openai_api_key)
+    completion = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": """You are a function. The function decides if the prompt needs access to database to answer query 
+                            related to travel information, the db contains information for travel planning 
+                            in following tables locations ,         
+                 1. Locations 
+                    Purpose: Stores information about various travel destinations.
+                    Key Data: Includes LocationID, city names, countries, and descriptions of each location.
+                2. Packages 
+                    Purpose: Details of pre-arranged travel packages.
+                    Key Data: Includes PackageID, LocationID, names, descriptions, durationdays and prices.
+                3. Bookings 
+                    Purpose: Records of bookings made by users.
+                    Key Data: Contains BookingID, references to UserID and PackageID, and dates of booking and travel."""},
+                {"role": "user", "content": prompt}
+            ]
+        )
+    print(completion)
+    gpt_response = completion.choices[0].message.content.strip()
+    print("\n\ngpt_response :", gpt_response)
+    gpt_score = 1 if "database" in gpt_response.lower() else 0
+    # gpt_score = 0
+
+    # # Part 2: Word2Vec Similarity Check
+    # conn = sqlite3.connect(db_path)
+    # cursor = conn.cursor()
+    # cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+    # tables = cursor.fetchall()
+
+    # db_vectors = []
+    # for table in tables:
+    #     table_name = table[0]
+    #     # Add the table name to the db_vectors
+    #     db_vectors.append(vectorize_text(table_name))
+
+    #     # Get column names for the table
+    #     cursor.execute(f"PRAGMA table_info({table_name});")
+    #     columns = cursor.fetchall()
+    #     for column in columns:
+    #         column_name = column[1]  # column name is typically in the second position
+    #         # Add the column name to the db_vectors
+    #         db_vectors.append(vectorize_text(column_name))
+
+    #     # Fetch data from each table and vectorize
+    #     cursor.execute(f"SELECT * FROM {table_name}")
+    #     data = cursor.fetchall()
+    #     for row in data:
+    #         for element in row:
+    #             # Vectorize the element and add to the db_vectors
+    #             element_vector = vectorize_text(str(element))
+    #             db_vectors.append(element_vector)
+                
+    # with open('db_vector.pkl', 'wb') as f:  # open a text file
+    #     pickle.dump(db_vectors, f) # serialize the list
+
+    with open('db_vector.pkl', 'rb') as f:  # open a text file
+        db_vectors = pickle.load(f)
+
+    # print(question)
+    question_tokens = [word for word in word_tokenize(question.lower()) if word not in stop_words and word not in punctuation]
+    max_val = []
+    for question in question_tokens:
+        question_vector = vectorize_text(question)
+        similarities = [np.dot(question_vector, db_vector) / (np.linalg.norm(question_vector) * np.linalg.norm(db_vector)) for db_vector in db_vectors if np.linalg.norm(db_vector) > 0]
+        ans = 0 if math.isnan(max(similarities)) else max(similarities) 
+        max_val.append(ans)
+        print("\n\ntop_similarities for", question, "are :", ans)
+    
+    # Use average of top N similarities for decision
+    avg_similarity = np.mean(max_val) if max_val else 0
+    
+    # print("\n\nsimilarities", similarities)
+    # print("\n\top_similarities", top_similarities)
+    print("\n\navg_similarity", avg_similarity)
+
+    # Ensemble Decision
+    combined_score = gpt_score * gpt_weight + avg_similarity * similarity_weight
+    print("GPT Score:", gpt_score)
+    print("GPT Weight:", gpt_weight)
+    print("Similarity Weight:", similarity_weight)
+    print("Combined Score:", combined_score)
+
+    # Final Decision
+    if combined_score > 0.5:  # Adjust threshold as necessary
+        return 0 # DB Question
+    else:
+        return 1 # General Knowledge
 
