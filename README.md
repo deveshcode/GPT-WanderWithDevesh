@@ -29,3 +29,17 @@ These instructions will get you a copy of the project up and running on your loc
 
 ```bash
 git clone https://github.com/yourusername/wanderwithdevesh.git
+```
+
+### Example Inputs
+Hey, Which Countries do you guys give tour packages in ? 
+Oh Great, which cities in USA do you guys give tour for ? 
+How many days for the Los Angeles tour ?
+And how much will Los Angeles cost me ?
+What’s the best cusine to try out in Paris ?
+How many days will I get in the Tour for city of Paris ?
+What's the package cost in Paris?
+Which all cities do you guys cover again ?
+Give me London City details ?
+How many days will I get in the city of Bali ?
+
