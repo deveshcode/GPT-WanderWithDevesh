@@ -1,0 +1,12 @@
+Notes : 
+Faker for fake data /kaggle flights to india as well
+Memory could be artifically added / or chat based models could be used
+chatbot structure could be used  
+BERT model could be used instead of embedding
+Avatars <3
+Bottom right mein chatbot type bhi ho sakta hai
+Temperature could be controlled 
+Could do multiple calls and be fail safe
+You can add reinforcement learning to keep track of all queries and then train finetune model later
+Better name : GiggleGuide
+Mistral 7B could be used 
